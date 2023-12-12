@@ -1,0 +1,44 @@
+HTML
+
+<form action="LoginServlet" method="post">
+            UserName : <input type="text" name="uname"><br>
+            Password : <input type="password" name="pw"><br>
+            Email : <input type="text" name="email"><br>
+            Country : <select name="coun">
+                <option>select.....
+                <option> India
+                <option> England
+                <option> Pakistan
+            </select> <br>
+            <input type="submit" value="Register">
+        </form>
+
+-------
+
+Connect db
+
+Servlet
+import java.sql.*;
+
+(Inside body)
+  Connection con=null;
+ PreparedStatement ps=null;
+ response.setContentType("text/html");
+ String username=request.getParameter("uname");
+ String password=request.getParameter("pw");
+ String emailid=request.getParameter("email");
+ String country=request.getParameter("coun");
+ try
+ { Class.forName("com.mysql.jdbc.Driver");
+ con=DriverManager.getConnection("jdbc:mysql://localhost:3306/registerdb","root","tiger");
+ out.println("connection done successfully...");
+ ps=con.prepareStatement("insert into user values (?,?,?,?)");
+ ps.setString(1,username);
+ ps.setString(2,password);
+ ps.setString(3,emailid);
+ ps.setString(4,country);
+ ps.execute();
+out.print("Data insserted successfully!!!!");
+ }
+ catch(Exception e) { out.println(e); }
+ out.println("<b>"+"<b>");

@@ -1,0 +1,56 @@
+HTML
+
+<form action="CCServlet" >
+ Enter Amount <input type="text" name="amt"><br>
+ Select Conversion Type
+<input type="radio" name="type" value="r2d" checked>Rupees to Dollar
+ <input type="radio" name="type" value="d2r" >Dollar to Rupees<br>
+ <input type="reset" ><input type="submit" value="CONVERT" >
+ </form>
+
+------------
+
+Create SessionBean as CCBean | Stateless | Package=mybeans | Tick Local
+
+CCBean.java
+
+Below Public class:
+
+public double r2Dollar(double r) {
+        return r / 65.65;
+    }
+
+    public double d2Rupees(double d) {
+        return d * 65.65;
+    }
+
+--------
+
+CCBeanLocal.java
+
+Below Public Interface: 
+
+public double r2Dollar(double r);
+public double d2Rupees(double d);
+
+-----------
+
+Servlet
+
+Class name: CCServlet
+Package: mypack
+
+Below public class CCServlet:
+
+@EJB CCBeanLocal obj;
+
+Below body:
+
+double amt = Double.parseDouble(request.getParameter("amt"));
+            if (request.getParameter("type").equals("r2d")) {
+                out.println("<h1>" + amt + " Rupees = " + obj.r2Dollar(amt) + " Dollars</h1>");
+            }
+            if (request.getParameter("type").equals("d2r")) {
+                out.println("<h1>" + amt + " Dollars = " + obj.d2Rupees(amt) + " Rupees</h1>");
+            }
+

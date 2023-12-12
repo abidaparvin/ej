@@ -1,0 +1,21 @@
+HTML(Inside Body)
+
+<form action="LoginServlet" method="post">
+            UserName : <input type="text" name="uname">
+            Password : <input type="password" name="pwd"><br>
+            <input type="submit" value="Login">
+        </form>
+
+--------
+
+Servlet(Inside Body)
+
+String username = request.getParameter("uname");
+            String password = request.getParameter("pwd");
+            String msg = "";
+            if (username.equals("admin") && password.equals("admin123")) {
+                msg = "Hello " + username;
+            } else {
+                msg = "Login failed";
+            }
+            out.println("<b>" + msg + "<b>");

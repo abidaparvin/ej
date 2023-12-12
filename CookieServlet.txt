@@ -1,0 +1,38 @@
+CookieServlet
+
+
+Import Packages:
+
+import java.io.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+
+
+private int i=1; -(Mention this line above protected void line)
+protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+
+Below Body:
+
+String k=String.valueOf(i);
+            Cookie c = new Cookie("visit",k);
+            response.addCookie(c);
+            int j=Integer.parseInt(c.getValue());
+            if (j==1)
+            {
+            out.println("This is the first time you are visiting this page!");
+            }
+            else
+            { synchronized(CookieServlet.this)
+            { out.println("You visited this page "+i+" times");      
+            }
+            }
+
+----------
+
+
+After,
+out.println("</html>");
+        }
+
+i++; -(Mention this)
+

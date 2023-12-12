@@ -1,0 +1,29 @@
+Adding Servlet:
+
+Right click on Source Packages
+New
+Servlet
+
+---------
+
+Adding JSP Page:
+
+Right click on Web Pages
+New
+JSP
+
+---------
+
+Adding Sql Connector:
+
+Right click on Liabraries
+Add Jar Folder
+select mysqlconnector
+
+---------
+
+Adding SessionBean:
+
+Right click on blue world logo on left side
+New
+SessionBean

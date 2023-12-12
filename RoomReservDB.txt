@@ -1,0 +1,145 @@
+Create Database: roomdb
+
+Services/Database/Right click Java DB/ Create Database
+
+After creating database, add tables.
+
+Drivers/Open roomdb/Right click on Tables/ Create Table
+Table name: room
+Add columns-
+total int
+occ int
+
+insert into room values(50, 0) -to execute through execute command
+
+--------------
+
+
+HTML
+
+<form method="post" action="RoomClient">
+            <br> No of Rooms <input type=text name="t1">
+            <br> <input type="submit" name="btn" value="CheckIN">
+            <br> <input type="submit" name="btn" value="CheckOUT">
+        </form>
+
+---------
+
+Create SessionBean
+Source Packages/New/Session Bean
+
+EJB Name: RoomBean
+Location: Source Package
+Session Type: Stateless
+Tick on Local Interface
+
+RoomBeanLocal.java
+
+Below public interface RoomBeanLocal,
+
+ public int checkin(int no);
+
+    public int checkout(int no);
+
+------
+
+RoomBean.java
+
+Import Package,
+import java.sql.*;
+
+Below public class RoomBean,
+
+public int checkin(int no) {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/roomdb", "root", "tiger");
+            String sql1 = "select * from room";
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery(sql1);
+            rs.next();
+            int total = rs.getInt(1);
+            int occ = rs.getInt(2);
+            int free = total - occ;
+            System.out.println(total);
+            System.out.println(free);
+            if (free >= no) {
+                String sql2 = "update room set occ=?";
+                PreparedStatement ps = con.prepareStatement(sql2);
+                ps.setInt(1, occ + no);
+                int res = ps.executeUpdate();
+                return res;
+            } else {
+                return 0;
+            }
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+
+    public int checkout(int no) {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/roomdb", "root", "tiger");
+            String sql1 = "select * from room";
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery(sql1);
+            rs.next();
+            int total = rs.getInt(1);
+            int occ = rs.getInt(2);
+            if (occ >= no) {
+                String sql2 = "update room set occ=?";
+                PreparedStatement ps = con.prepareStatement(sql2);
+                ps.setInt(1, occ - no);
+                int res = ps.executeUpdate();
+                return res;
+            } else {
+                return 0;
+            }
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+}
+
+-------------
+
+Create Servlet
+
+Class Name: RoomClient
+Package: servlet
+
+Import Packages,
+import java.io.IOException;
+import java.io.PrintWriter;
+import javax.servlet.annotation.*;
+
+Below public class RoomClient,
+@EJB
+    RoomBeanLocal obj;
+
+Between Body:
+
+try {
+                int no = Integer.parseInt(request.getParameter("t1"));
+                String b = request.getParameter("btn");
+                int res = 0;
+                if (b.equals("CheckIN")) {
+                    res = obj.checkin(no);
+                    if (res == 1) {
+                        out.println(no + " rooms check-in");
+                    }
+                }
+                if (b.equals("CheckOUT")) {
+                    res = obj.checkout(no);
+                    if (res == 1) {
+                        out.println(no + " rooms check-out");
+                    }
+                }
+                if (res == 0) {
+                    out.println("Not possible to do Check IN / OUT");
+                }
+                out.println("<br><br><a href=index.html> Back </a>");
+            } finally {
+                out.close();
+            }

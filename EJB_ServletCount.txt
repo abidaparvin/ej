@@ -1,0 +1,39 @@
+SessionBean
+
+EJB Name: CountServletHitsBean
+Location: Source Package
+Package: ejb
+Session Type: Singleton
+[Do not select Local]
+
+Under public class:
+
+private int hitCount;
+
+    public synchronized int getCount() {
+        return hitCount++;
+    }
+
+--------
+
+Servlet
+
+Class Name: ServletClient
+Location: Source Package
+Package: servlet
+
+Import Packages:
+
+import ejb.CountServletHitsBean;
+import java.io.*;
+import javax.ejb.EJB;
+
+Below public class ServletClient:
+
+@EJB CountServletHitsBean obj; -(Mention this line)
+
+----------
+
+Below Body:
+
+out.print("<b>Number of times this server is accessed </b>: "+obj.getCount());
